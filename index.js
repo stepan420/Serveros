@@ -1,4 +1,5 @@
-let c1 = 69
-let c2 = 88
-let sou = c1 + c2
-console.log("Součet je " + sou)
+const http = require("http")
+http.createServer((req, res) => {
+    res.writeHead(200, {"Content-type":"text/html"})
+    res.end("<html lang='cs'><head><meta charset='UTF8'></head><body>SKRRRÁ</body></html>")
+}).listen(88)
