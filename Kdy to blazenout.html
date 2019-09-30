@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Datumové pokusy</title>
+    <script>
+        function nactiDatum() {
+            fetch("http://localhost:88/dentyd").then(function(response) {
+                response.text().then(function(text) {
+                    let obj = JSON.parse(text);
+                    document.getElementById("den").innerHTML = "bb";
+                    document.getElementById("datum").innerHTML = obj.date;
+                });
+            });
+        }
+    </script>
+</head>
+<body onload="nactiDatum()">
+
+Dnes je <b id="den"></b> <b id="datum"></b>.
+
+</body>
+</html>
