@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Datumové pokusy</title>
+    <title>Title</title>
     <script>
         function nactiDatum() {
             fetch("http://localhost:88/dentyd").then(function(response) {
@@ -19,14 +19,17 @@
                 response.text().then(function(text) {
                     let obj = JSON.parse(text);
                     document.getElementById("svatek").innerHTML = obj.svatek;
+                    document.getElementById("zitra").innerHTML = obj.zitra;
                 });
             });
         }
     </script>
 </head>
 <body onload="nactiDatum()">
-
+<h1>ŠKRRR</h1>
 Dnes je <b id="den"></b> <b id="datum"></b>, svátek má <b id="svatek"></b>.
-
+Zítra má svátek <b id="zitra"></b>.
+<br><br>
+<img src="stonks.jpg">
 </body>
 </html>
