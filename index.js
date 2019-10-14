@@ -14,9 +14,13 @@ SVATKY[9] = [ "",'Linda a Samuel', 'Adéla', 'Bronislav', 'Jindřiška', 'Boris'
 SVATKY[10] = [ "",'Igor', 'Olívie a Oliver', 'Bohumil', 'František', 'Eliška', 'Hanuš', 'Justýna', 'Věra', 'Štefan a Sára', 'Marina', 'Andrej', 'Marcel', 'Renáta', 'Agáta', 'Tereza', 'Havel', 'Hedvika', 'Lukáš', 'Michaela', 'Vendelín', 'Brigita', 'Sabina', 'Teodor', 'Nina', 'Beáta', 'Erik', 'Šarlota a Zoe', 'Statní svátek - Vznik Československa', 'Silvie', 'Tadeáš', 'Štěpánka'];
 SVATKY[11] = [ "",'Felix', 'Památka zesnulých', 'Hubert', 'Karel', 'Miriam', 'Liběna', 'Saskie', 'Bohumír', 'Bohdan', 'Evžen', 'Martin', 'Benedikt', 'Tibor', 'Sáva', 'Leopold', 'Otmar', 'Mahulena', 'Romana', 'Alžběta', 'Nikola', 'Albert', 'Cecílie', 'Klement', 'Emílie', 'Kateřina', 'Artur', 'Xenie', 'René', 'Zina', 'Ondřej'];
 SVATKY[12] = [ "",'Iva', 'Blanka', 'Svatoslav', 'Barbora', 'Jitka', 'Mikuláš', 'Ambrož', 'Květoslava', 'Vratislav', 'Julie', 'Dana', 'Simona', 'Lucie', 'Lýdie', 'Radana', 'Albína', 'Daniel', 'Miloslav', 'Ester', 'Dagmar', 'Natálie', 'Šimon', 'Vlasta', 'Adam a Eva , Štědrý den', '1. svátek vánoční', 'Štěpán , 2. svátek vánoční', 'Žaneta', 'Bohumila', 'Judita', 'David', 'Silvestr'];
+const url = require("url")
+
 
 let citac = 0;
 let blip = 1;
+
+let msgs = new Array();
 
 function processStaticFiles(res, fileName) {
     fileName = fileName.substr(1);
@@ -40,16 +44,19 @@ function processStaticFiles(res, fileName) {
     }
 }
 http.createServer((req, res) => {
-    if (req.url === "/") {
+    console.log(req.url);
+    let q = url.parse(req.url, true);
+    console.log(q.pathname);
+    if (q.pathname === "/") {
         citac++;
         processStaticFiles(res, "/index.html");
         return;
     }
-    if (req.url.length - req.url.lastIndexOf(".") < 6) {
-        processStaticFiles(res, req.url);
+    if (q.pathname.length - q.pathname.lastIndexOf(".") < 6) {
+        processStaticFiles(res, q.pathname);
         return;
     }
-    if (req.url === "/blipblop") {
+    if (q.pathname === "/blipblop") {
         blip = blip * -1;
         if (blip === 1) {
             res.writeHead(200, {"Content-type": "text/html"});
@@ -62,7 +69,7 @@ http.createServer((req, res) => {
 
         }
     }
-    else if (req.url === "/jsondemoperson"){
+    else if (q.pathname === "/jsondemoperson"){
         res.writeHead(200, {"Content-type":"application/json"});
         let obj = {};
         obj.jmeno = "Bob";
@@ -70,13 +77,13 @@ http.createServer((req, res) => {
         obj.rokNarozeni = 2069;
         res.end(JSON.stringify(obj))
     }
-    else if (req.url === "/jsoncitac") {
+    else if (q.pathname === "/jsoncitac") {
         res.writeHead(200, {"Content-type": "application/json"});
         let obj = {};
         obj.pocetVolani = citac;
         res.end(JSON.stringify(obj))
     }
-    else if (req.url === "/dentyd") {
+    else if (q.pathname === "/dentyd") {
         res.writeHead(200, {"Content-type": "application/json", "Access-Control-Allow-Origin":"*"});
         let d = new Date();
         let obj = {};
@@ -86,13 +93,36 @@ http.createServer((req, res) => {
         obj.dnycsk = DNY[d.getDay()];
         res.end(JSON.stringify(obj))
     }
-    else if (req.url === "/svatky") {
-        res.writeHead(200, {"Content-type": "application/json", "Access-Control-Allow-Origin":"*"})
-        let d = new Date()
-        let obj = {}
-        obj.svatek = SVATKY[d.getMonth()+1][d.getDate()]
-        obj.zitra = SVATKY[d.getMonth()+1][d.getDate()+1]
+    else if (q.pathname === "/svatky") {
+        res.writeHead(200, {"Content-type": "application/json", "Access-Control-Allow-Origin":"*"});
+        let obj = {};
+        if(q.query["m"] && q.query["d"]){
+            let d = q.query["d"];
+            let m = q.query["m"];
+            obj.datum = d+"."+m+".";
+            obj.svatek = SVATKY[m][d];
+        }
+        else {
+            let d = new Date();
+            obj.svatek = SVATKY[d.getMonth() + 1][d.getDate()];
+            obj.zitra = SVATKY[d.getMonth() + 1][d.getDate() + 1];
+
+        }
         res.end(JSON.stringify(obj))
+    }
+    else if (q.pathname === "/chat/listmsgs") {
+        res.writeHead(200, {"Content-type": "application/json", "Access-Control-Allow-Origin":"*"});
+        let obj = {};
+        obj.messages = msgs;
+        res.end(JSON.stringify(obj));
+    }
+    else if (q.pathname === "/chat/addmsgs") {
+        res.writeHead(200, {"Content-type": "application/json", "Access-Control-Allow-Origin":"*"});
+        let obj = {};
+        obj.text = q.query["msg"];
+        obj.time = new Date
+        msgs.push(obj);
+        res.end(JSON.stringify(obj));
     }
     else{
         res.writeHead(200, {"Content-type":"text/html"});
