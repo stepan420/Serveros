@@ -2,72 +2,55 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>ESKETIT</title>
+    <title>Serveros</title>
     <script>
-        function nactiDatum() {
+        function nactiDatum(){fetch("http://localhost:88/dentyd").then(function(response){
+            response.text().then(function(text) {
+                let obj = JSON.parse(text);
+                document.getElementById("den").innerHTML = obj.dnycsk;
+                document.getElementById("datum").innerHTML = obj.datum;
+            })});
+            nactiSvatek();
             setInterval(seznam, 1000);
-            fetch("http://localhost:88/dentyd").then(function(response) {
-                response.text().then(function(text) {
-                    let obj = JSON.parse(text);
-                    document.getElementById("den").innerHTML = obj.dnycsk;
-                    document.getElementById("datum").innerHTML = obj.date;
-                });
-            });
-            nactiSvatek()
-        }
-        function nactiSvatek() {
-            fetch("http://localhost:88/svatky").then(function(response) {
-                response.text().then(function(text) {
-                    let obj = JSON.parse(text);
-                    document.getElementById("svatek").innerHTML = obj.svatek;
-                    document.getElementById("zitra").innerHTML = obj.zitra;
-                });
-            });
-        }
-        function kalendar() {
+        }function nactiSvatek(){fetch("http://localhost:88/svatky").then(function(response){
+            response.text().then(function(text){
+                let obj = JSON.parse(text);
+                document.getElementById("svatek").innerHTML = obj.svatek;
+                document.getElementById("zitra").innerHTML = obj.zitra;
+            })});
+        }function kalendar(){
             let d = document.getElementById("kalendar").valueAsDate;
-            fetch("http://localhost:88/svatky?d="+d.getDate()+"&m="+(d.getMonth()+1)).then(function(response) {
-                response.text().then(function(text) {
+            fetch("http://localhost:88/svatky?d="+d.getDate()+"&m="+(d.getMonth()+1)).then(function(response){
+                response.text().then(function(text){
                     let obj = JSON.parse(text);
-                    document.getElementById("kSvatek").innerHTML = obj.svatek;
-                });
-            });
-        }
-        function posli(){
+                    document.getElementById("kalSvatek").innerHTML = obj.svatek;
+                })});
+        }function posli(){
             let msg = document.getElementById("msg").value;
             let name = document.getElementById("name").value;
-            fetch("http://localhost:88/chat/addmsgs?msg="+msg+"&name="+name).then(function(response) {
-                response.text().then(function(text) {
+            fetch("http://localhost:88/chat/addmsgs?msg="+msg+"&name="+name).then(function(response){
+                response.text().then(function(){
                     document.getElementById("msg").value = ""
-                });
-            });
-        }
-        function seznam(){
-            fetch("http://localhost:88/chat/listmsgs").then(function(response) {
-                response.text().then(function(text) {
-                    let obj = JSON.parse(text);
-                    let s = "";
-                    for (let o of obj.messages){
-                        s = s + o.time + "<br>" + o.name + "<br>" + o.text + "<br>";
-                    }
-                    document.getElementById("msgs").innerHTML = s
-                });
-            });
+                })});
+        }function seznam(){fetch("http://localhost:88/chat/listmsgs").then(function(response){
+            response.text().then(function(text) {
+                let obj = JSON.parse(text);
+                let s = "";
+                for (let o of obj.messages){s = s + o.time + "<br><b>" + o.name + ":</b><br>" + o.text + "<br><br>"}
+                document.getElementById("msgs").innerHTML = s
+            });});
         }
     </script>
 </head>
-<body style="font-family: Calibri; font-size: 25px" onload="nactiDatum()">
+<body style="font-family: Calibri; font-size: 20px" onload="nactiDatum()">
 <h1>ŠKRRR</h1>
-Dnes je <b id="den"></b> <b id="datum"></b>, svátek má <b id="svatek"></b>.
-Zítra má svátek <b id="zitra"></b>.
-<br><br>
-<input type="date" id="kalendar" onchange="kalendar()"> má svátek <span id="kSvatek"></span>
-<br><br>
+Dnes je <b id="den"></b> <b id="datum"></b>, svátek má <b id="svatek"></b>. Zítra má svátek <b id="zitra"></b>.
+<br>
+<input type="date" id="kalendar" onchange="kalendar()"> má svátek <b id="kalSvatek">________</b>
 <h1>ČED</h1>
 <div id="msgs"></div>
-<input type="text" id="name"><input type="text" id="msg"><input type="button" value="Yeetnout" onClick="posli()">
-
-<br><br>
+<br><b>Jméno:</b> <input type="text" id="name"> <b>Zpráva:</b> <input type="text" id="msg"> <input type="button" value="Poslat" onClick="posli()">
+<br><br><br><br><br><br><br><br><br>
 <img src="stonks.jpg">
 </body>
 </html>
