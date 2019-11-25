@@ -32,4 +32,4 @@ http.createServer(function(req, res){
         res.writeHead(200, {"Content-type":"text/html"});
         res.end("<html style='font-family: Calibri; font-size: 500px' lang='cs'><head><meta charset='UTF8'><title>BYL JSI VYTROLEN</title></head><body>LIBTARDE</body></html>")
     }
-}).listen(88);
+}).listen(8080);

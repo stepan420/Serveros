@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title>Serveros</title>
     <script>
-        function nactiDatum(){fetch("http://localhost:88/dentyd").then(function(response){
+        const HOST = window.location.protocol + "//" + window.location.hostname + ((window.location.port) ? ":" + window.location.port : "");
+        function nactiDatum(){fetch(HOST + "/dentyd").then(function(response){
             response.text().then(function(text) {
                 let obj = JSON.parse(text);
                 document.getElementById("den").innerHTML = obj.dnycsk;
@@ -13,7 +14,7 @@
             nactiSvatek();
             setInterval(seznam, 1000);
         }
-        function nactiSvatek(){fetch("http://localhost:88/svatky").then(function(response){
+        function nactiSvatek(){fetch(HOST + "/svatky").then(function(response){
             response.text().then(function(text){
                 let obj = JSON.parse(text);
                 document.getElementById("svatek").innerHTML = obj.svatek;
@@ -22,7 +23,7 @@
         }
         function kalendar(){
             let d = document.getElementById("kalendar").valueAsDate;
-            fetch("http://localhost:88/svatky?d="+d.getDate()+"&m="+(d.getMonth()+1)).then(function(response){
+            fetch(HOST + "/svatky?d="+d.getDate()+"&m="+(d.getMonth()+1)).then(function(response){
                 response.text().then(function(text){
                     let obj = JSON.parse(text);
                     document.getElementById("kalSvatek").innerHTML = obj.svatek;
@@ -31,12 +32,12 @@
         function posli(){
             let msg = document.getElementById("msg").value;
             let name = document.getElementById("name").value;
-            fetch("http://localhost:88/chat/addmsgs?msg="+msg+"&name="+name).then(function(response){
+            fetch(HOST + "/chat/addmsgs?msg="+msg+"&name="+name).then(function(response){
                 response.text().then(function(){
                     document.getElementById("msg").value = ""
                 })});
         }
-        function seznam(){fetch("http://localhost:88/chat/listmsgs").then(function(response){
+        function seznam(){fetch(HOST + "/chat/listmsgs").then(function(response){
             response.text().then(function(text) {
                 let obj = JSON.parse(text);
                 let s = "";
