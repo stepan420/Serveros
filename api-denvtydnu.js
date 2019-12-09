@@ -1,6 +1,6 @@
 const DNY = ["Neděle", "Pondělí", "Úterý", "Středa", "Čtvrek", "Pátek", "Sobota"];
 exports.apiDenVTydnu = function(req, res){
-    res.writeHead(200, {"Content-type": "application/json", "Access-Control-Allow-Origin":"*"});
+    res.writeHead(200, {"Content-type": "application/json"});
     let d = new Date();
     let obj = {};
     obj.cas = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();

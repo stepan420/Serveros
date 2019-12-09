@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="4469f322-9902-45dc-bc85-29e949d3b4ee" name="rosti" url="http://localhost:8080">
+        <fileTransfer host="node-14.rosti.cz" port="16407" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="16407" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

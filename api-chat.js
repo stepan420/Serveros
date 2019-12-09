@@ -1,16 +1,29 @@
 let msgs = new Array();
+const Entities = require('html-entities').AllHtmlEntities;
+const entities = new Entities();
 exports.apiChat = function(req, res, q){
-    res.writeHead(200, {"Content-type": "application/json", "Access-Control-Allow-Origin": "*"});
     if (q.pathname === "/chat/listmsgs") {
+        res.writeHead(200, {"Content-type": "application/json"});
         let obj = {};
         obj.messages = msgs;
         res.end(JSON.stringify(obj));
-    }else if (q.pathname === "/chat/addmsgs"){
-        let obj = {};
-        obj.text = q.query["msg"];
-        obj.name = q.query["name"];
-        obj.time = new Date;
-        msgs.push(obj);
-        res.end(JSON.stringify(obj));
+    }else if (q.pathname === "/chat/addmsgs") {
+        let data = "";
+        req.on('data', function(chunk){
+            try {data += chunk}
+            catch(e){console.error(e)}
+        });
+        req.on('end', function(){
+            if (data){
+                let body = JSON.parse(data);
+                res.writeHead(200, {"Content-type": "application/json"});
+                let obj = {};
+                obj.text = entities.encode(body.msg);
+                obj.name = entities.encode(body.name);
+                obj.time = new Date;
+                msgs.push(obj);
+                res.end(JSON.stringify(obj));
+            }
+        })
     }
 };

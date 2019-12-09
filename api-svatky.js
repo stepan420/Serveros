@@ -12,7 +12,7 @@ SVATKY[10] = [ "",'Igor', 'Olívie a Oliver', 'Bohumil', 'František', 'Eliška'
 SVATKY[11] = [ "",'Felix', 'Památka zesnulých', 'Hubert', 'Karel', 'Miriam', 'Liběna', 'Saskie', 'Bohumír', 'Bohdan', 'Evžen', 'Martin', 'Benedikt', 'Tibor', 'Sáva', 'Leopold', 'Otmar', 'Mahulena', 'Romana', 'Alžběta', 'Nikola', 'Albert', 'Cecílie', 'Klement', 'Emílie', 'Kateřina', 'Artur', 'Xenie', 'René', 'Zina', 'Ondřej'];
 SVATKY[12] = [ "",'Iva', 'Blanka', 'Svatoslav', 'Barbora', 'Jitka', 'Mikuláš', 'Ambrož', 'Květoslava', 'Vratislav', 'Julie', 'Dana', 'Simona', 'Lucie', 'Lýdie', 'Radana', 'Albína', 'Daniel', 'Miloslav', 'Ester', 'Dagmar', 'Natálie', 'Šimon', 'Vlasta', 'Adam a Eva , Štědrý den', '1. svátek vánoční', 'Štěpán , 2. svátek vánoční', 'Žaneta', 'Bohumila', 'Judita', 'David', 'Silvestr'];
 exports.apiSvatky = function(req, res, q){
-        res.writeHead(200, {"Content-type": "application/json", "Access-Control-Allow-Origin": "*"});
+        res.writeHead(200, {"Content-type": "application/json"});
         let obj = {};
         if (q.query["m"] && q.query["d"]) {
             let d = q.query["d"];

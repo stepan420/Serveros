@@ -19,23 +19,31 @@
                 let obj = JSON.parse(text);
                 document.getElementById("svatek").innerHTML = obj.svatek;
                 document.getElementById("zitra").innerHTML = obj.zitra;
-            })});
-        }
+            })
+        })}
         function kalendar(){
             let d = document.getElementById("kalendar").valueAsDate;
             fetch(HOST + "/svatky?d="+d.getDate()+"&m="+(d.getMonth()+1)).then(function(response){
                 response.text().then(function(text){
                     let obj = JSON.parse(text);
                     document.getElementById("kalSvatek").innerHTML = obj.svatek;
-                })});
+                })
+            })
         }
         function posli(){
             let msg = document.getElementById("msg").value;
             let name = document.getElementById("name").value;
-            fetch(HOST + "/chat/addmsgs?msg="+msg+"&name="+name).then(function(response){
+            let body = {};
+            body.msg = msg;
+            body.name = name;
+            let options = {};
+            options.method = "POST";
+            options.body = JSON.stringify(body);
+            fetch(HOST + "/chat/addmsgs", options).then(function(response){
                 response.text().then(function(){
                     document.getElementById("msg").value = ""
-                })});
+                })
+            })
         }
         function seznam(){fetch(HOST + "/chat/listmsgs").then(function(response){
             response.text().then(function(text) {
@@ -43,8 +51,8 @@
                 let s = "";
                 for (let o of obj.messages){s = s + o.time + "<br><b>" + o.name + ":</b><br>" + o.text + "<br><br>"}
                 document.getElementById("msgs").innerHTML = s
-            });});
-        }
+            })
+        })}
     </script>
 </head>
 <body style="font-family: Calibri; font-size: 20px" onload="nactiDatum()">
@@ -55,7 +63,7 @@ Dnes je <b id="den"></b> <b id="datum"></b>, svátek má <b id="svatek"></b>. Z�
 <h1>ČED</h1>
 <div id="msgs"></div>
 <br><b>Jméno:</b> <input type="text" id="name"> <b>Zpráva:</b> <input type="text" id="msg"> <input type="button" value="Poslat" onClick="posli()">
-<br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br>
 <img src="stonks.jpg">
 </body>
 </html>

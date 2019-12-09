@@ -1,7 +1,7 @@
 const uniqid = require("uniqid");
 let mereni = new Array();
 exports.apiStopky = function(req, res, q) {
-    res.writeHead(200, {"Content-type": "application/json", "Access-Control-Allow-Origin": "*"});
+    res.writeHead(200, {"Content-type": "application/json"});
     let obj = {};
     if (q.pathname === "/stopky/start") {
         let m = {};
