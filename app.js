@@ -5,6 +5,7 @@ const apiDenVTydnu = require("./api-denvtydnu").apiDenVTydnu;
 const apiSvatky = require("./api-svatky").apiSvatky;
 const apiChat = require("./api-chat").apiChat;
 const apiStopky = require("./api-stopky").apiStopky;
+const apiUsers = require("./api-users").apiUsers;
 
 function processStaticFiles(res, fileName){
     fileName = fileName.substr(1);
@@ -30,6 +31,7 @@ http.createServer(function(req, res){
     else if (q.pathname === "/svatky"){apiSvatky(req, res, q)}
     else if (q.pathname.startsWith("/chat/")){apiChat(req, res, q)}
     else if (q.pathname.startsWith("/stopky/")){apiStopky(req, res, q)}
+    else if (q.pathname.startsWith("/users/")){apiUsers(req, res, q)}
     else{
         res.writeHead(200, {"Content-type":"text/html"});
         res.end("<html style='font-family: Calibri; font-size: 500px' lang='cs'><head><meta charset='UTF8'><title>BYL JSI VYTROLEN</title></head><body>LIBTARDE</body></html>")

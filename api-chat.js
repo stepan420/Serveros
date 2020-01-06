@@ -2,8 +2,8 @@ let msgs = new Array();
 const Entities = require('html-entities').AllHtmlEntities;
 const entities = new Entities();
 exports.apiChat = function(req, res, q){
+    res.writeHead(200, {"Content-type": "application/json"});
     if (q.pathname === "/chat/listmsgs") {
-        res.writeHead(200, {"Content-type": "application/json"});
         let obj = {};
         obj.messages = msgs;
         res.end(JSON.stringify(obj));
@@ -16,7 +16,6 @@ exports.apiChat = function(req, res, q){
         req.on('end', function(){
             if (data){
                 let body = JSON.parse(data);
-                res.writeHead(200, {"Content-type": "application/json"});
                 let obj = {};
                 obj.text = entities.encode(body.msg);
                 obj.name = entities.encode(body.name);
