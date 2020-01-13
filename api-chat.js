@@ -1,6 +1,7 @@
-let msgs = new Array();
 const Entities = require('html-entities').AllHtmlEntities;
 const entities = new Entities();
+let msgs = new Array();
+
 exports.apiChat = function(req, res, q){
     res.writeHead(200, {"Content-type": "application/json"});
     if (q.pathname === "/chat/listmsgs") {
@@ -21,7 +22,6 @@ exports.apiChat = function(req, res, q){
                 obj.name = entities.encode(body.name);
                 obj.time = new Date;
                 msgs.push(obj);
-                res.end(JSON.stringify(obj));
             }
         })
     }

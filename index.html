@@ -53,12 +53,12 @@
                 document.getElementById("msgs").innerHTML = s
             })
         })}
-        function registrace(){
+        function reg(){
             document.getElementById("reg").style.display = "block";
             document.getElementById("login").style.display = "none";
             document.getElementById("chat").style.display = "none";
         }
-        function login(){
+        function log(){
             document.getElementById("reg").style.display = "none";
             document.getElementById("login").style.display = "block";
             document.getElementById("chat").style.display = "none";
@@ -74,9 +74,12 @@
                 options.body = JSON.stringify(body);
                 fetch(HOST + "/users/adduser", options).then(function(response) {
                     response.text().then(function () {
-                        document.getElementById("reg").style.display = "none";
-                        document.getElementById("login").style.display = "block";
-                    })
+                        let obj = JSON.parse(text);
+                        if(obj.error){alert(obj.error)}
+                        else {
+                            document.getElementById("reg").style.display = "none";
+                            document.getElementById("login").style.display = "block";
+                        }})
                 })
             }else{document.getElementById("wrongpass").innerHTML = "Špatně zopakované heslo"}
         }
@@ -92,7 +95,7 @@
     Dnes je <b id="den"></b> <b id="datum"></b>, svátek má <b id="svatek"></b>. Zítra má svátek <b id="zitra"></b>.<br>
     <input type="date" id="kalendar" onchange="kalendar()"> má svátek <b id="kalSvatek">________</b>
 </div>
-<br><input type="button" value="Registrace" onclick="registrace()"> <input type="button" value="Přihlášení" onClick="login()">
+<br><input type="button" value="Registrace" onclick="reg()"> <input type="button" value="Přihlášení" onClick="log()">
 <div id="chat" style="display: none">
     <h1>ČED</h1>
     <div id="msgs"></div>
