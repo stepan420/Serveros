@@ -11,20 +11,12 @@ SVATKY[9] = [ "",'Linda a Samuel', 'Adéla', 'Bronislav', 'Jindřiška', 'Boris'
 SVATKY[10] = [ "",'Igor', 'Olívie a Oliver', 'Bohumil', 'František', 'Eliška', 'Hanuš', 'Justýna', 'Věra', 'Štefan a Sára', 'Marina', 'Andrej', 'Marcel', 'Renáta', 'Agáta', 'Tereza', 'Havel', 'Hedvika', 'Lukáš', 'Michaela', 'Vendelín', 'Brigita', 'Sabina', 'Teodor', 'Nina', 'Beáta', 'Erik', 'Šarlota a Zoe', 'Statní svátek - Vznik Československa', 'Silvie', 'Tadeáš', 'Štěpánka'];
 SVATKY[11] = [ "",'Felix', 'Památka zesnulých', 'Hubert', 'Karel', 'Miriam', 'Liběna', 'Saskie', 'Bohumír', 'Bohdan', 'Evžen', 'Martin', 'Benedikt', 'Tibor', 'Sáva', 'Leopold', 'Otmar', 'Mahulena', 'Romana', 'Alžběta', 'Nikola', 'Albert', 'Cecílie', 'Klement', 'Emílie', 'Kateřina', 'Artur', 'Xenie', 'René', 'Zina', 'Ondřej'];
 SVATKY[12] = [ "",'Iva', 'Blanka', 'Svatoslav', 'Barbora', 'Jitka', 'Mikuláš', 'Ambrož', 'Květoslava', 'Vratislav', 'Julie', 'Dana', 'Simona', 'Lucie', 'Lýdie', 'Radana', 'Albína', 'Daniel', 'Miloslav', 'Ester', 'Dagmar', 'Natálie', 'Šimon', 'Vlasta', 'Adam a Eva , Štědrý den', '1. svátek vánoční', 'Štěpán , 2. svátek vánoční', 'Žaneta', 'Bohumila', 'Judita', 'David', 'Silvestr'];
-exports.apiSvatky = function(req, res, q){
+
+exports.apiSvatky = function(req, res) {
         res.writeHead(200, {"Content-type": "application/json"});
         let obj = {};
-        if (q.query["m"] && q.query["d"]) {
-            let d = q.query["d"];
-            let m = q.query["m"];
-            obj.datumSvatku = d + "." + m + ".";
-            obj.svatek = SVATKY[m][d];
-            obj.zitra = SVATKY[m][Number(d)+1];
-        }
-        else{
-            let d = new Date();
-            obj.svatek = SVATKY[d.getMonth() + 1][d.getDate()];
-            obj.zitra = SVATKY[d.getMonth() + 1][d.getDate() + 1];
-        }
+        let d = new Date();
+        obj.svatek = SVATKY[d.getMonth() + 1][d.getDate()];
+        obj.zitra = SVATKY[d.getMonth() + 1][d.getDate() + 1];
         res.end(JSON.stringify(obj))
 };

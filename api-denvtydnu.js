@@ -1,5 +1,6 @@
 const DNY = ["Neděle", "Pondělí", "Úterý", "Středa", "Čtvrek", "Pátek", "Sobota"];
-exports.apiDenVTydnu = function(req, res){
+
+exports.apiDenVTydnu = function(req, res) {
     res.writeHead(200, {"Content-type": "application/json"});
     let d = new Date();
     let obj = {};

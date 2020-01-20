@@ -1,9 +1,10 @@
 const uniqid = require("uniqid");
 let mereni = new Array();
-exports.apiStopky = function(req, res, q) {
+
+exports.apiStopky = function(req, res) {
     res.writeHead(200, {"Content-type": "application/json"});
     let obj = {};
-    if (q.pathname === "/stopky/start") {
+    if (req.pathname === "/stopky/start") {
         let m = {};
         m.tmStart = new Date().getTime();
         let id = uniqid();
@@ -12,9 +13,9 @@ exports.apiStopky = function(req, res, q) {
         obj.status = "Started";
         obj.m = mereni;
         res.end(JSON.stringify(obj));
-    } else if (q.pathname === "/stopky/stop") {
+    } else if (req.pathname === "/stopky/stop") {
         let tmStop = new Date().getTime();
-        let id = q.query["id"];
+        let id = req.query["id"];
         let m = mereni[id];
         obj.status = "Stopped";
         obj.m = mereni;

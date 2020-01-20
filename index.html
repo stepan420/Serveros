@@ -5,32 +5,24 @@
     <title>Serveros</title>
     <script>
         const HOST = window.location.protocol + "//" + window.location.hostname + ((window.location.port) ? ":" + window.location.port : "");
-        function nactiDatum(){fetch(HOST + "/dentyd").then(function(response){
+        function nactiDatum() {fetch(HOST + "/dentyd").then(function(response) {
             response.text().then(function(text) {
                 let obj = JSON.parse(text);
                 document.getElementById("den").innerHTML = obj.dnycsk;
                 document.getElementById("datum").innerHTML = obj.datum;
-            })});
+            })
+        });
             nactiSvatek();
             setInterval(seznam, 1000);
         }
-        function nactiSvatek(){fetch(HOST + "/svatky").then(function(response){
-            response.text().then(function(text){
+        function nactiSvatek() {fetch(HOST + "/svatky").then(function(response) {
+            response.text().then(function(text) {
                 let obj = JSON.parse(text);
                 document.getElementById("svatek").innerHTML = obj.svatek;
                 document.getElementById("zitra").innerHTML = obj.zitra;
             })
         })}
-        function kalendar(){
-            let d = document.getElementById("kalendar").valueAsDate;
-            fetch(HOST + "/svatky?d="+d.getDate()+"&m="+(d.getMonth()+1)).then(function(response){
-                response.text().then(function(text){
-                    let obj = JSON.parse(text);
-                    document.getElementById("kalSvatek").innerHTML = obj.svatek;
-                })
-            })
-        }
-        function posli(){
+        function posli() {
             let msg = document.getElementById("msg").value;
             let name = document.getElementById("name").value;
             let body = {};
@@ -39,32 +31,40 @@
             let options = {};
             options.method = "POST";
             options.body = JSON.stringify(body);
-            fetch(HOST + "/chat/addmsgs", options).then(function(response){
-                response.text().then(function(){
+            fetch(HOST + "/chat/addmsgs", options).then(function(response) {
+                response.text().then(function() {
                     document.getElementById("msg").value = ""
                 })
             })
         }
-        function seznam(){fetch(HOST + "/chat/listmsgs").then(function(response){
+        function seznam() {fetch(HOST + "/chat/listmsgs").then(function(response) {
             response.text().then(function(text) {
                 let obj = JSON.parse(text);
                 let s = "";
-                for (let o of obj.messages){s = s + o.time + "<br><b>" + o.name + ":</b><br>" + o.text + "<br><br>"}
+                for (let o of obj.messages) {s = s + o.time + "<br><b>" + o.name + ":</b><br>" + o.text + "<br><br>"}
                 document.getElementById("msgs").innerHTML = s
             })
         })}
-        function reg(){
+        function reg() {
             document.getElementById("reg").style.display = "block";
             document.getElementById("login").style.display = "none";
             document.getElementById("chat").style.display = "none";
+            document.getElementById("reglog").style.display = "none";
         }
-        function log(){
+        function log() {
             document.getElementById("reg").style.display = "none";
             document.getElementById("login").style.display = "block";
             document.getElementById("chat").style.display = "none";
+            document.getElementById("reglog").style.display = "none";
         }
-        function registruj(){
-            if (document.getElementById("regpass").value === document.getElementById("reg2pass").value){
+        function zpet() {
+            document.getElementById("reg").style.display = "none";
+            document.getElementById("login").style.display = "none";
+            document.getElementById("chat").style.display = "none";
+            document.getElementById("reglog").style.display = "block";
+        }
+        function registruj() {
+            if (document.getElementById("regpass").value === document.getElementById("reg2pass").value) {
                 let body = {};
                 body.name = document.getElementById("regname").value;
                 body.pass = document.getElementById("regpass").value;
@@ -73,17 +73,15 @@
                 options.method = "POST";
                 options.body = JSON.stringify(body);
                 fetch(HOST + "/users/adduser", options).then(function(response) {
-                    response.text().then(function () {
+                    response.text().then(function (text) {
                         let obj = JSON.parse(text);
-                        if(obj.error){alert(obj.error)}
-                        else {
-                            document.getElementById("reg").style.display = "none";
-                            document.getElementById("login").style.display = "block";
-                        }})
+                        if (obj.error) {alert(obj.error)}
+                        else {log()}
+                    })
                 })
-            }else{document.getElementById("wrongpass").innerHTML = "Špatně zopakované heslo"}
+            } else{alert("Špatně zopakované heslo")}
         }
-        function prihlas(){
+        function prihlas() {
             bb = document.getElementById("logemail").value;
             gg = document.getElementById("logpass").value;
         }
@@ -91,12 +89,9 @@
 </head>
 <body style="font-family: Calibri; font-size: 20px" onload="nactiDatum()">
 <h1>ŠKRRR</h1>
-<div>
-    Dnes je <b id="den"></b> <b id="datum"></b>, svátek má <b id="svatek"></b>. Zítra má svátek <b id="zitra"></b>.<br>
-    <input type="date" id="kalendar" onchange="kalendar()"> má svátek <b id="kalSvatek">________</b>
-</div>
-<br><input type="button" value="Registrace" onclick="reg()"> <input type="button" value="Přihlášení" onClick="log()">
-<div id="chat" style="display: none">
+<div>Dnes je <b id="den"></b> <b id="datum"></b>, svátek má <b id="svatek"></b>. Zítra má svátek <b id="zitra"></b>.<br><br></div>
+<div id="reglog"><input type="button" value="Registrace" onclick="reg()"> <input type="button" value="Přihlášení" onClick="log()"></div>
+<div id="chat" style="display: block">
     <h1>ČED</h1>
     <div id="msgs"></div>
     <br><b>Jméno:</b> <input type="text" id="name"> <b>Zpráva:</b> <input type="text" id="msg"> <input type="button" value="Poslat" onClick="posli()">
@@ -104,7 +99,7 @@
 <div id="login" style="display: none">
     E-mail: <input type="text" id="logemail"><br>
     Heslo: <input type="password" id="logpass"><br>
-    <input type="button" value="Přihlásit" onClick="prihlas()">
+    <input type="button" value="Přihlásit" onClick="prihlas()"> <input type="button" value="Zpět" onClick="zpet()">
 </div>
 <div id="reg" style="display: none">
     Registrace:<br>
@@ -112,7 +107,7 @@
     Heslo: <input type="password" id="regpass"><br>
     Znovu heslo: <input type="password" id="reg2pass"><br>
     E-mail: <input type="text" id="regemail"><br>
-    <input type="button" value="Registrovat" onclick="registruj()"> <span id="wrongpass"></span>
+    <input type="button" value="Registrovat" onclick="registruj()"> <input type="button" value="Zpět" onClick="zpet()">
 </div>
 <br><br><br><br><br><br>
 <img src="stonks.jpg">
