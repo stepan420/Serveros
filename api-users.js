@@ -34,5 +34,8 @@ exports.apiUsers = function(req, res) {
         let obj = {};
         obj.email = req.parameters.email;
         obj.pass = req.parameters.pass;
+        for (let u of users) {
+            if () {}
+        }
     }
 };
