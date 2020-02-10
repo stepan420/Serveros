@@ -5,6 +5,7 @@
     <title>Serveros</title>
     <script>
         const HOST = window.location.protocol + "//" + window.location.hostname + ((window.location.port) ? ":" + window.location.port : "");
+        let loggedUserToken;
         function nactiDatum() {fetch(HOST + "/dentyd").then(function(response) {
             response.text().then(function(text) {
                 let obj = JSON.parse(text);
@@ -67,6 +68,7 @@
             if (document.getElementById("regpass").value === document.getElementById("reg2pass").value) {
                 let body = {};
                 body.name = document.getElementById("regname").value;
+                body.realname = document.getElementById("regrealname").value;
                 body.pass = document.getElementById("regpass").value;
                 body.email = document.getElementById("regemail").value;
                 let options = {};
@@ -82,8 +84,19 @@
             } else{alert("Špatně zopakované heslo")}
         }
         function prihlas() {
-            bb = document.getElementById("logemail").value;
-            gg = document.getElementById("logpass").value;
+            let body = {};
+            body.email = document.getElementById("logemail").value;
+            body.pass = document.getElementById("logpass").value;
+            let options = {};
+            options.method = "POST";
+            options.body = JSON.stringify(body);
+            fetch(HOST + "/users/login", options).then(function(response){
+                response.text().then(function(text){
+                    let obj = JSON.parse(text);
+                    if (obj.error) {alert(obj.error)}
+                    else {loggedUserToken = obj.token}
+                })
+            })
         }
     </script>
 </head>
@@ -102,8 +115,9 @@
     <input type="button" value="Přihlásit" onClick="prihlas()"> <input type="button" value="Zpět" onClick="zpet()">
 </div>
 <div id="reg" style="display: none">
-    Registrace:<br>
-    Jméno: <input type="text" id="regname"><br>
+    <b>Registrace:</b><br>
+    Přihlašovací jméno: <input type="text" id="regname"><br>
+    Jméno: <input type="text" id="regrealname"><br>
     Heslo: <input type="password" id="regpass"><br>
     Znovu heslo: <input type="password" id="reg2pass"><br>
     E-mail: <input type="text" id="regemail"><br>

@@ -12,13 +12,14 @@ exports.apiUsers = function(req, res) {
     }
     else if (req.pathname === "/users/adduser") {
         let obj = {};
-        obj.name = req.parameters.name;
+        obj.logname = req.parameters.name;
+        obj.name = req.parameters.realname;
         let salt = req.parameters.pass.split("").reverse().join("");
         obj.password = crypto.createHmac("sha256", salt).update(req.parameters.pass).digest("hex");
         obj.email = req.parameters.email;
         let userExists = false;
         for (let u of users) {
-            if (u.name === obj.name ) {userExists = true; break}
+            if (u.logname === obj.logname ) {userExists = true; break}
         }
         if (userExists) {
             obj.error = "Jméno už existuje";
@@ -28,5 +29,10 @@ exports.apiUsers = function(req, res) {
             fs.writeFileSync("users.json", JSON.stringify(users, null, 2));
             res.end(JSON.stringify(obj));
         }
+    }
+    else if (req.pathname === "/users/login") {
+        let obj = {};
+        obj.email = req.parameters.email;
+        obj.pass = req.parameters.pass;
     }
 };
