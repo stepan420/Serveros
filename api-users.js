@@ -34,8 +34,18 @@ exports.apiUsers = function(req, res) {
         let obj = {};
         obj.email = req.parameters.email;
         obj.pass = req.parameters.pass;
+        crypto.randomBytes(16).toString("hex");
+        let loggedUsers = new Array();
+        let loggedUser = {};
+        loggedUser.name = obj.name;
+        let token = crypto.randomBytes(16).toString('hex');
+        loggedUsers[token] = loggedUser;
+        obj.token = token;
+        exports.getLoggedUser = function (token) {
+            return loggedUsers[token];
+        }
         for (let u of users) {
-            if () {}
+            if (g) {}
         }
     }
 };

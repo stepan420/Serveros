@@ -18,3 +18,4 @@ function processApi(req, res) {
     }
 }
 createSpaServer(PORT, processApi);
+//ssh -L 127.0.0.1:3306:store5.rosti.cz:3306 -p 16407 app@node-14.rosti.cz
